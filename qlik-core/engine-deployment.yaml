@@ -33,6 +33,11 @@ spec:
         args: [
           "-S", "AcceptEULA=no", # change to 'yes' if you accept the Qlik Core EULA
           "-S", "LicenseServiceUrl=http://license-service:9200",
+          "-S", "QvLogHandleRequestOnExit=1",
+          "-S", "SessionLogVerbosity=5",
+          "-S", "SessionStopLogVerbosity=5",
+          "-S", "ValidateJsonWebTokens=2",
+          "-S", "JsonWebTokenSecret=secret",
           "-S", "DocumentDirectory=/doc"
         ]
         imagePullPolicy: IfNotPresent
@@ -48,6 +53,9 @@ spec:
           preStop:
             exec:
               command: ["sh", "-c", "/engine-prestop-hook/engine-prestop-hook.sh"]
+      - name: tcpdump
+        image: eu.gcr.io/api-project-97421487144/tcpdump:0.0.1
+        imagePullPolicy: IfNotPresent
       volumes:
         - name: engine-prestop-hook
           configMap:
