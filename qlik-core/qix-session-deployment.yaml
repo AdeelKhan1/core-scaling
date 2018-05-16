@@ -25,5 +25,8 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9455
+      - name: tcpdump
+        image: eu.gcr.io/api-project-97421487144/tcpdump:0.0.1
+        imagePullPolicy: IfNotPresent
       imagePullSecrets:
       - name: dockerhub
