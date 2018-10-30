@@ -18,10 +18,10 @@ function create_cluster() {
   --network "default" --enable-cloud-logging --enable-cloud-monitoring \
   --subnetwork "default" --enable-autoscaling --min-nodes $GCLOUD_MIN_NODES \
   --max-nodes $GCLOUD_MAX_NODES &&
-GCLOUD_ZONE=$(gcloud container clusters describe $K8S_CLUSTER --region=$GCLOUD_REGION --format config | grep "zone = " | cut -d' ' -f3) &&
-gcloud compute disks create --size=10GB --zone=$GCLOUD_ZONE-a $DISK_NAME &&
+GCLOUD_ZONE=$(gcloud compute instances list | grep $K8S_CLUSTER | head -1 | cut -d' ' -f3) &&
+gcloud compute disks create --size=10GB --zone=$GCLOUD_ZONE $DISK_NAME &&
 gcloud container node-pools create monitoring --cluster=$K8S_CLUSTER \
-  --machine-type=$GCLOUD_MACHINE_TYPE --scopes $GCLOUD_SCOPES --num-nodes=1 --region $GCLOUD_REGION
+  --machine-type=$GCLOUD_MACHINE_TYPE --scopes $GCLOUD_SCOPES --num-nodes=1 --zone $GCLOUD_ZONE
 }
 
 function deploy_enviroment() {
