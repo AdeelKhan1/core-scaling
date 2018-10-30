@@ -21,7 +21,7 @@ function create_cluster() {
 GCLOUD_ZONE=$(gcloud container clusters describe $K8S_CLUSTER --region=$GCLOUD_REGION --format config | grep "zone = " | cut -d' ' -f3) &&
 gcloud compute disks create --size=10GB --zone=$GCLOUD_ZONE-1 $DISK_NAME &&
 gcloud container node-pools create monitoring --cluster=$K8S_CLUSTER \
-  --machine-type=$GCLOUD_MACHINE_TYPE --scopes $GCLOUD_SCOPES --num-nodes=1 --zone $GCLOUD_ZONE
+  --machine-type=$GCLOUD_MACHINE_TYPE --scopes $GCLOUD_SCOPES --num-nodes=1 --region $GCLOUD_REGION
 }
 
 function deploy_enviroment() {
