@@ -7,9 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install jq
-          command: sudo apt-get install jq
-      - run:
           name: Store Service Account
           command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
       - run:
