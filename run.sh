@@ -12,12 +12,13 @@ command=$1
 
 function create_cluster() {
   gcloud container --project $GCLOUD_PROJECT clusters create $K8S_CLUSTER \
-  --zone $GCLOUD_ZONE --username="admin" --cluster-version $K8S_VERSION \
+  --region $GCLOUD_REGION --username="admin" --cluster-version $K8S_VERSION \
   --machine-type $GCLOUD_MACHINE_TYPE --image-type $GCLOUD_IMAGE_TYPE \
   --disk-size $GCLOUD_DISK_SIZE --scopes $GCLOUD_SCOPES --num-nodes $GCLOUD_NUM_NODES \
   --network "default" --enable-cloud-logging --enable-cloud-monitoring \
   --subnetwork "default" --enable-autoscaling --min-nodes $GCLOUD_MIN_NODES \
   --max-nodes $GCLOUD_MAX_NODES &&
+GCLOUD_ZONE=$(gcloud container clusters describe $K8S_CLUSTER --format json | jq -r .zone) &&
 gcloud compute disks create --size=10GB --zone=$GCLOUD_ZONE $DISK_NAME &&
 gcloud container node-pools create monitoring --cluster=$K8S_CLUSTER \
   --machine-type=$GCLOUD_MACHINE_TYPE --scopes $GCLOUD_SCOPES --num-nodes=1 --zone $GCLOUD_ZONE
